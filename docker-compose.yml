@@ -1,0 +1,16 @@
+---
+version: '3.3'
+
+services:
+  web:
+    build: .
+    image: fibonachi-challenge
+    command: flask run --host=0.0.0.0
+    ports:
+      - '8000:5000'
+    volumes:
+      - ./project:/home/app/project
+    environment:
+      - FLASK_DEBUG=1
+      - SECRET_KEY=not sure
+    tty: true
