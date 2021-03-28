@@ -1,7 +1,7 @@
 import unittest
 import requests
 
-from project.server.api.routes import remove_from_blacklist_errstr
+from project.server.api.routes import remove_from_blacklist_errstr, invalid_input_errstr
 
 
 class TestModel(unittest.TestCase):
@@ -19,7 +19,10 @@ class TestModel(unittest.TestCase):
     def test_task_1_endpoint(self):
         trials = ((4, 3),
                   (7, 13),
-                  (10, 55))
+                  (10, 55),
+                  (10.5, invalid_input_errstr),
+                  (-10, invalid_input_errstr),
+                  )
 
         for index, number in trials:
             response = requests.get(url=self.fnumber_url, json={'index': index})
@@ -31,6 +34,8 @@ class TestModel(unittest.TestCase):
                   (4, {'indexes': [0, 1, 2, 3, 4], 'numbers': [0, 1, 1, 2, 3]}),
                   (7, {'indexes': [0, 1, 2, 3, 4, 5, 6, 7], 'numbers': [0, 1, 1, 2, 3, 5, 8, 13]}),
                   (10, {'indexes': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'numbers': [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]}),
+                  (10.5, invalid_input_errstr),
+                  (-10, invalid_input_errstr),
                   )
 
 
@@ -58,6 +63,8 @@ class TestModel(unittest.TestCase):
         trials = ((4, [4], {'indexes': [0, 1, 2, 3], 'numbers': [0, 1, 1, 2]}),
                   (7, [4, 7], {'indexes': [0, 1, 2, 3, 5, 6], 'numbers': [0, 1, 1, 2, 5, 8]}),
                   (10, [4, 7, 10], {'indexes': [0, 1, 2, 3, 5, 6, 8, 9], 'numbers': [0, 1, 1, 2, 5, 8, 21, 34]}),
+                  (10.5, invalid_input_errstr, invalid_input_errstr),
+                  (-10, invalid_input_errstr, invalid_input_errstr),
                   )
 
         for index, blacklist, sequence in trials:
